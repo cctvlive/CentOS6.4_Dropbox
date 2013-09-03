@@ -5,7 +5,7 @@ CentOS6.4_Dropbox
 
 Public : CentOS使用Dropbox定时同步备份方案详解
 
-欢迎交流:cctv_243028755@qq.com cctv_243028755@live.cn chinacodeigniter@gmail
+欢迎交流:cctv_243028755@qq.com cctv_243028755@live.cn chinacodeigniter@gmail.com
 
 
 
@@ -25,8 +25,8 @@ cd ~ && wget -O - "http://www.dropbox.com/download?plat=lnx.x86" | tar xzf -
 
 cd ~ && wget -O - "http://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
 
-    下载后已自动解压，不需要再执行解压命令。
-2.0 ~/.dropbox-dist/dropboxd 安装执行,弹出安装引导
+2.0    下载后已自动解压，不需要再执行解压命令。~/.dropbox-dist/dropboxd 安装执行,弹出安装引导
+ 
 2、
 Dropbox与机器绑定：
 
@@ -119,55 +119,55 @@ DBPath=/usr/local/mysql/var/ #备份的数据库目录
 NewFile="$BackupPath"db$(date +%y%m%d).tgz
 DumpFile="$BackupPath"db$(date +%y%m%d)
 OldFile="$BackupPath"db$(date +%y%m%d --date='5 days ago').tgz  #自动删除5天前的备份
-echo "-------------------------------------------" >> $LogFile
-echo $(date +"%y-%m-%d %H:%M:%S") >> $LogFile
-echo "--------------------------" >> $LogFile
+echo "-------------------------------------------" &gt;&gt; $LogFile
+echo $(date +"%y-%m-%d %H:%M:%S") &gt;&gt; $LogFile
+echo "--------------------------" &gt;&gt; $LogFile
 #Delete Old File
 if [ -f $OldFile ]
 then
-       rm -f $OldFile >> $LogFile 2>&1
-       echo "[$OldFile]Delete Old File Success!" >> $LogFile
+rm -f $OldFile &gt;&gt; $LogFile 2&gt;&1
+echo "[$OldFile]Delete Old File Success!" &gt;&gt; $LogFile
 else
-       echo "[$OldFile]No Old Backup File!" >> $LogFile
+echo "[$OldFile]No Old Backup File!" &gt;&gt; $LogFile
 fi
 if [ -f $NewFile ]
 then
-       echo "[$NewFile]The Backup File is exists,Can't Backup!" >> $LogFile
+echo "[$NewFile]The Backup File is exists,Can't Backup!" &gt;&gt; $LogFile
 else
-       case $BackupMethod in
-       mysqldump)
-               if [ -z $DBPasswd ]
-               then
-                       mysqldump -u $DBUser --opt $DBName > $DumpFile
-               else
-                       mysqldump -u $DBUser -p$DBPasswd --opt $DBName > $DumpFile
-               fi
-               tar czvf $NewFile $DumpFile >> $LogFile 2>&1
-               echo "[$NewFile]Backup Success!" >> $LogFile
-               rm -rf $DumpFile
-               ;;
-       mysqlhotcopy)
-               rm -rf $DumpFile
-               mkdir $DumpFile
-               if [ -z $DBPasswd ]
-               then
-                       mysqlhotcopy -u $DBUser $DBName $DumpFile >> $LogFile 2>&1
-               else
-                       mysqlhotcopy -u $DBUser -p $DBPasswd $DBName $DumpFile >>$LogFile 2>&1
-               fi
-               tar czvf $NewFile $DumpFile >> $LogFile 2>&1
-               echo "[$NewFile]Backup Success!" >> $LogFile
-               rm -rf $DumpFile
-               ;;
-       *)
-               service mysql stop >/dev/null 2>&1
-               tar czvf $NewFile $DBPath$DBName >> $LogFile 2>&1
-               service mysql start >/dev/null 2>&1
-               echo "[$NewFile]Backup Success!" >> $LogFile
-               ;;
-       esac
+case $BackupMethod in
+mysqldump)
+       if [ -z $DBPasswd ]
+       then
+	       mysqldump -u $DBUser --opt $DBName &gt; $DumpFile
+       else
+	       mysqldump -u $DBUser -p$DBPasswd --opt $DBName &gt; $DumpFile
+       fi
+       tar czvf $NewFile $DumpFile &gt;&gt; $LogFile 2&gt;&1
+       echo "[$NewFile]Backup Success!" &gt;&gt; $LogFile
+       rm -rf $DumpFile
+       ;;
+mysqlhotcopy)
+       rm -rf $DumpFile
+       mkdir $DumpFile
+       if [ -z $DBPasswd ]
+       then
+	       mysqlhotcopy -u $DBUser $DBName $DumpFile &gt;&gt; $LogFile 2&gt;&1
+       else
+	       mysqlhotcopy -u $DBUser -p $DBPasswd $DBName $DumpFile &gt;&gt;$LogFile 2&gt;&1
+       fi
+       tar czvf $NewFile $DumpFile &gt;&gt; $LogFile 2&gt;&1
+       echo "[$NewFile]Backup Success!" &gt;&gt; $LogFile
+       rm -rf $DumpFile
+       ;;
+*)
+       service mysql stop &gt;/dev/null 2&gt;&1
+       tar czvf $NewFile $DBPath$DBName &gt;&gt; $LogFile 2&gt;&1
+       service mysql start &gt;/dev/null 2&gt;&1
+       echo "[$NewFile]Backup Success!" &gt;&gt; $LogFile
+       ;;
+esac
 fi
-echo "-------------------------------------------" >> $LogFile
+echo "-------------------------------------------" &gt;&gt; $LogFile
 
 
     记得修改上面代码中的中文部分为自己的参数。接下来，为bakmysql.sh添加可执行权限
