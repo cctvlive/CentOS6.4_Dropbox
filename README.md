@@ -5,7 +5,7 @@ CentOS6.4_Dropbox
 
 Public : CentOS使用Dropbox定时同步备份方案详解
 
-欢迎交流:cctv_243028755@qq.com cctv_243028755@live.cn chinacodeigniter@gmail.com
+欢迎交流: cctv_243028755@live.cn chinacodeigniter@gmail.com
 
 
 
@@ -28,15 +28,15 @@ cd ~ && wget -O - "http://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
 2.0    下载后已自动解压，不需要再执行解压命令。~/.dropbox-dist/dropboxd 安装执行,弹出安装引导
  
 2、
-Dropbox与机器绑定：
+#Dropbox与机器绑定：
 
 执行以下命令
 
 ~/.dropbox-dist/dropboxd &   后台运行
 
-  #  第一次执行会生成“host_id”，这机器与Dropbox进行绑定的唯一字符串，提示的信息是一个链接，而且会重复滚动出现直到绑定完成。复制这个链接在浏览器里访问，输入Dropbox帐户和密码就可以了，输入后会自动跳转到Dropbox主界面并且会有绑定成功的提示，此时在ssh客户端里也会有提示并且停止滚动，再按回车键就完成绑定。
+  //#  第一次执行会生成“host_id”，这机器与Dropbox进行绑定的唯一字符串，提示的信息是一个链接，而且会重复滚动出现直到绑定完成。复制这个链接在浏览器里访问，输入Dropbox帐户和密码就可以了，输入后会自动跳转到Dropbox主界面并且会有绑定成功的提示，此时在ssh客户端里也会有提示并且停止滚动，再按回车键就完成绑定。
 
-#    (注：官方的运行命令结尾没有“&”这个符号，在centos下运行会出现ssh冻结无反应的情况，据称Debian也会。实际上守护进程已经在运行了。)
+//#    (注：官方的运行命令结尾没有“&”这个符号，在centos下运行会出现ssh冻结无反应的情况，据称Debian也会。实际上守护进程已经在运行了。)
 
 3、
 建立目录软链接：
@@ -112,17 +112,18 @@ DBUser=修改为数据库用户名
 DBPasswd=修改为数据库密码
 BackupPath=/root/Dropbox/
 LogFile=/root/db.log
-DBPath=/usr/local/mysql/var/ #备份的数据库目录
-#BackupMethod=mysqldump
-#BackupMethod=mysqlhotcopy
-#BackupMethod=tar
+DBPath=/usr/local/mysql/var/ 
+//#备份的数据库目录
+//#BackupMethod=mysqldump
+//#BackupMethod=mysqlhotcopy
+//#BackupMethod=tar
 NewFile="$BackupPath"db$(date +%y%m%d).tgz
 DumpFile="$BackupPath"db$(date +%y%m%d)
 OldFile="$BackupPath"db$(date +%y%m%d --date='5 days ago').tgz  #自动删除5天前的备份
 echo "-------------------------------------------" &gt;&gt; $LogFile
 echo $(date +"%y-%m-%d %H:%M:%S") &gt;&gt; $LogFile
 echo "--------------------------" &gt;&gt; $LogFile
-#Delete Old File
+//#Delete Old File
 if [ -f $OldFile ]
 then
 rm -f $OldFile &gt;&gt; $LogFile 2&gt;&1
